@@ -1,5 +1,5 @@
 //alert("数据内容为"+$("#data-table").text());
-common_ajax_query();
+//common_ajax_query();
 common_ajax_json_query();
 function common_ajax_json_query(param_obj) {
 	$.ajax({

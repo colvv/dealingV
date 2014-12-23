@@ -1,7 +1,10 @@
 package com.vv.dealingV.bean;
 
-public class SysUser {
-	private String id;
+import java.io.Serializable;
+
+public class SysUser implements Serializable {
+	private static final long serialVersionUID = 1684635898478047267L;
+	private String userID;
 	private String userCode;
 	private String userName;
 	private String password;
@@ -9,11 +12,12 @@ public class SysUser {
 	private String state;
 	private String email;
 	private String phone;
-	public String getId() {
-		return id;
+	
+	public String getUserID() {
+		return userID;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setUserID(String userID) {
+		this.userID = userID;
 	}
 	public String getUserCode() {
 		return userCode;

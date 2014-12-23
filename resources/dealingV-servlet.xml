@@ -12,9 +12,9 @@
            http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
            http://www.springframework.org/schema/aop     
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
-
-	<context:component-scan base-package="com.vv.dealingV.service"></context:component-scan>
 	<context:component-scan base-package="com.vv.dealingV.dao"></context:component-scan>
+	<context:component-scan base-package="com.vv.dealingV.service"></context:component-scan>
+	<context:component-scan base-package="com.vv.dealingV.controller" />
 	<mvc:annotation-driven>
 		<!-- 增加repsonse默认编码 -->
 		<mvc:message-converters register-defaults="true">
@@ -23,7 +23,6 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
-	<context:component-scan base-package="com.vv.dealingV.controller" />
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/*" />
@@ -47,26 +46,27 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close">
-		<property name="driverClass" value="com.mysql.jdbc.Driver"></property>
-		<property name="jdbcUrl" value="jdbc:mysql://localhost:3308/dealingv"></property>
-		<property name="user" value="root"></property>
-		<property name="password" value="3087554"></property>
-		<property name="acquireIncrement" value="5"></property>  <!-- 当连接池中的连接用完时，C3P0一次性创建新连接的数目2 -->
-		<property name="initialPoolSize" value="10"></property>  <!-- 初始化时创建的连接数，必须在minPoolSize和maxPoolSize之间 -->
-		<property name="minPoolSize" value="5"></property>
-		<property name="maxPoolSize" value="20"></property>
-		<!-- 最大空闲时间，超过空闲时间的连接将被丢弃 [需要注意：mysql默认的连接时长为8小时(28800）【可在my.ini中添加 wait_timeout=30(单位秒)设置连接超时】,这里设置c3p0的超时必须<28800] -->
-		<property name="maxIdleTime" value="300"></property>
-		<property name="idleConnectionTestPeriod" value="60"></property> <!-- 每60秒检查连接池中的空闲连接 -->
-		<property name="maxStatements" value="20"></property>
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
 	</bean>
-	<bean id="sqlSessionFactory"  class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="configLocation"  value="classpath:MyBatis-Configuration.xml"></property>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	 
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean> 
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.vv.dealingV.dao" />
+        <property name="annotationClass" value="org.springframework.stereotype.Repository" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+
 	<!-- welcome~ -->
 	<!-- 对静态资源文件的访问 方案一 （二选一） <mvc:default-servlet-handler /> -->
 	<!-- 对静态资源文件的访问 方案二 （二选一） <mvc:resources mapping="/images/**" location="/images/" 

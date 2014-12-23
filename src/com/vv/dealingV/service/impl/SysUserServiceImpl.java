@@ -2,6 +2,7 @@ package com.vv.dealingV.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vv.dealingV.bean.SysUser;
@@ -9,6 +10,7 @@ import com.vv.dealingV.dao.SysUserDao;
 import com.vv.dealingV.service.SysUserService;
 @Service
 public class SysUserServiceImpl implements SysUserService {
+	@Autowired
 	private SysUserDao tSysUserDao;
 
 	public SysUserDao gettSysUserDao() {
